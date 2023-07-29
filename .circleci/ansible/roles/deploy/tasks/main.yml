@@ -1,0 +1,18 @@
+---
+- name: Copy compiled files
+  become: true
+  unarchive:
+    src: /root/project/artifact.tar.gz
+    dest: /home/ubuntu/
+
+- name: Stop and delete already running server
+  become: true
+  ignore_errors: true
+  shell: |
+    pm2 kill
+
+- name: Start server
+  become: true
+  shell: |
+    cd /home/ubuntu/backend
+    pm2 start npm --name backend -- start
