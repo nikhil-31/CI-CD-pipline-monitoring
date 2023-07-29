@@ -1,64 +1,61 @@
-We are archiving this repository because we do not want learners to push personal development to the current repository. If you have any issues or suggestions to make, feel free to:
-- Utilize the https://knowledge.udacity.com/ forum to seek help on content-specific issues.
-- [Submit a support ticket](https://udacity.zendesk.com/hc/en-us/requests/new) along with the link to your forked repository. 
-- If you are an enterprise learner, please [Submit a support ticket here](https://udacityenterprise.zendesk.com/hc/en-us/requests/new?ticket_form_id=360000279131)
 
-## Give your Application Auto-Deploy Superpowers
+# CI/CD with monitoring
+This project is a part of the 3rd project in cloud developer nanodegree.
 
-In this project, you will prove your mastery of the following learning objectives:
+## Description
 
-- Explain the fundamentals and benefits of CI/CD to achieve, build, and deploy automation for cloud-based software products.
-- Utilize Deployment Strategies to design and build CI/CD pipelines that support Continuous Delivery processes.
-- Utilize a configuration management tool to accomplish deployment to cloud-based servers.
-- Surface critical server errors for diagnosis using centralized structured logging.
+This repo has a node frontend and backend application for employee management. The application is deployed to AWS using
+circleCI for CI/CD, cloudformation to provision the infrastructure, ansible for deployment configuration and 
+prometheus for monitoring during runtime. 
 
-![Diagram of CI/CD Pipeline we will be building.](udapeople.png)
+It has a fully automated CI/CD release pipeline, from build to production. It follows the blue-green deployment model.
+The new infrastructure is created using Cloudformation(IaC), configured using ansible, after successfully passing 
+the smoke tests, the newly crated and configured infrastructure is promoted to production by updating the cloudfront
+domain, and the old infrastructure is destroyed. 
 
-### Instructions
+For monitoring, prometheus is used, the node exporter is configured by ansible in the configuration phase.
+The prometheus instance is set up separately, and new instances are discovered using prometheus service discovery
+[link](https://codewizardly.com/prometheus-on-aws-ec2-part2/).
 
-* [Selling CI/CD](instructions/0-selling-cicd.md)
-* [Getting Started](instructions/1-getting-started.md)
-* [Deploying Working, Trustworthy Software](instructions/2-deploying-trustworthy-code.md)
-* [Configuration Management](instructions/3-configuration-management.md)
-* [Turn Errors into Sirens](instructions/4-turn-errors-into-sirens.md)
+The different phases of the CI/CD pipeline are shown,
 
-### Project Submission
+**Continuous Integration**
 
-For your submission, please submit the following:
+1. Build Phase - Build the frontend and backend applications.
+2. Test Phase - Test the frontend and backend applications.
+3. Analyse Phase - Check for security vulnerabilities and outdated dependencies.
 
-- A text file named `urls.txt` including:
-  1. Public Url to GitHub repository (not private) [URL01]
-  1. Public URL for your S3 Bucket (aka, your green candidate front-end) [URL02]
-  1. Public URL for your CloudFront distribution (aka, your blue production front-end) [URL03]
-  1. Public URLs to deployed application back-end in EC2 [URL04]
-  1. Public URL to your Prometheus Server [URL05]
-- Your screenshots in JPG or PNG format, named using the screenshot number listed in the instructions. These screenshots should be included in your code repository in the root folder.
-  1. Job failed because of compile errors. [SCREENSHOT01]
-  1. Job failed because of unit tests. [SCREENSHOT02]
-  1. Job that failed because of vulnerable packages. [SCREENSHOT03]
-  1. An alert from one of your failed builds. [SCREENSHOT04]
-  1. Appropriate job failure for infrastructure creation. [SCREENSHOT05]
-  1. Appropriate job failure for the smoke test job. [SCREENSHOT06]
-  1. Successful rollback after a failed smoke test. [SCREENSHOT07]  
-  1. Successful promotion job. [SCREENSHOT08]
-  1. Successful cleanup job. [SCREENSHOT09]
-  1. Only deploy on pushed to `master` branch. [SCREENSHOT10]
-  1. Provide a screenshot of a graph of your EC2 instance including available memory, available disk space, and CPU usage. [SCREENSHOT11]
-  1. Provide a screenshot of an alert that was sent by Prometheus. [SCREENSHOT12]
+**Continuous Delivery**
 
-- Your presentation should be in PDF format named "presentation.pdf" and should be included in your code repository root folder. 
+4. Create the infrastructure - Create the infrastructure using cloudformation.
+5. Configure the infrastructure - Configure the infrastructure using ansible.
+6. Run migrations - Run migrations for the database.
+6. Deploy the infrastructure - Deploy frontend and backend applications using ansible.
+7. Smoke Test - Checking if the new deployment is working .
+8. Rollback - If there is an issue detected during the smoke test phase, the new infra is cleaned-up/ deleted.
+9. Promotion Phase - If the smoke test passes successfully, the new infra is promoted to production by updating 
+the cloudfront distribution.
+10. Cleanup - The old infra is cleaned-up deleted.
 
-Before you submit your project, please check your work against the project rubric. If you haven’t satisfied each criterion in the rubric, then revise your work so that you have met all the requirements. 
+## Pipeline diagram
 
-### Built With
+![udapeople-pipeline](https://github.com/nikhil-31/django-docker-kubernetes-deploy-scripts/assets/19944703/7c94c26e-921c-4770-bc92-ab71be2db119)
+
+
+## Technologies used
 
 - [Circle CI](www.circleci.com) - Cloud-based CI/CD service
 - [Amazon AWS](https://aws.amazon.com/) - Cloud services
 - [AWS CLI](https://aws.amazon.com/cli/) - Command-line tool for AWS
-- [CloudFormation](https://aws.amazon.com/cloudformation/) - Infrastrcuture as code
+- [CloudFormation](https://aws.amazon.com/cloudformation/) - Infrastructure as code
 - [Ansible](https://www.ansible.com/) - Configuration management tool
 - [Prometheus](https://prometheus.io/) - Monitoring tool
 
-### License
 
-[License](LICENSE.md)
+## Screenshots are in the `/screenshots` folder [link](https://github.com/nikhil-31/CI-CD-pipline-monitoring/tree/main/screenshots)
+
+## License
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Copyright 2023 Nikhil Bhaskar
